@@ -1,16 +1,13 @@
-package com.dailycodework.universalpetcare.dto;
+package com.dailycodework.universalpetcare.request;
 
 import lombok.Data;
 
 @Data
-public class UserDto {
-    private Long id;
+public class UserUpdateRequest {
+
     private String firstName;
     private String lastName;
     private String gender;
     private String phoneNumber;
-    private String email;
-    private String userType;
-    private boolean isEnabled;
     private String specialization;
 }
