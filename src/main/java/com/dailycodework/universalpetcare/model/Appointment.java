@@ -1,5 +1,6 @@
 package com.dailycodework.universalpetcare.model;
 
+import com.dailycodework.universalpetcare.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,9 @@ public class Appointment {
     private String appointmentNo;
     private LocalDate createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
+
     @JoinColumn(name = "sender")
     @ManyToOne(fetch = FetchType.LAZY)
     private User patient;
@@ -32,6 +36,7 @@ public class Appointment {
     @JoinColumn(name = "recipient")
     @ManyToOne(fetch = FetchType.LAZY)
     private User recipient;
+
 
     public void addPatient(User sender) {
 
@@ -55,7 +60,7 @@ public class Appointment {
         recipient.getAppointments().add(this);
     }
 
-    public void setAppointmentNo(String appointmentNo) {
+    public void setAppointmentNo() {
 
         this.appointmentNo = String.valueOf(new Random().nextLong()).substring(1, 11);
     }
