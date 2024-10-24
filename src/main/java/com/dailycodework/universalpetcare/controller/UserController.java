@@ -10,10 +10,11 @@ import com.dailycodework.universalpetcare.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.dailycodework.universalpetcare.utils.FeedbackMessages.SUCCESS;
-import static com.dailycodework.universalpetcare.utils.FeedbackMessages.UPDATED;
+import static com.dailycodework.universalpetcare.utils.FeedbackMessages.*;
 import static com.dailycodework.universalpetcare.utils.UrlMapping.*;
 
 @RestController
@@ -55,18 +56,42 @@ public class UserController {
     }
 
     @GetMapping(USER_ID)
-    public ResponseEntity<UserDto> findUserById(@PathVariable(name = "userId") Long userId) {
+    public ResponseEntity<UserResponse> findUserById(@PathVariable(name = "userId") Long userId) {
 
         Optional<User> user = userService.findUserById(userId);
-        UserDto response = entityConverter.mapEntityToDto(user.get(), UserDto.class);
+        UserDto userDto = entityConverter.mapEntityToDto(user.get(), UserDto.class);
+        UserResponse response = new UserResponse();
+        response.setUserDto(userDto);
+        response.setMessage(FOUND);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping(DELETE)
+    @DeleteMapping(DELETE_USER_BY_ID)
     public ResponseEntity<String> delete(@PathVariable(name = "userId") Long userId) {
 
         userService.deleteUserById(userId);
-        return ResponseEntity.ok("User successfully deleted.");
+        return ResponseEntity.ok(DELETED);
+    }
+
+    @GetMapping(ALL_USERS)
+    public ResponseEntity<List<UserDto>> findAllUsers() {
+
+        List<User> allUsers = userService.findAllUsers();
+
+        List<UserDto> response = allUsers
+                .stream()
+                .map(e -> entityConverter.mapEntityToDto(e, UserDto.class))
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Long> count() {
+
+        Long count = userService.count();
+
+        return ResponseEntity.ok(count);
     }
 }

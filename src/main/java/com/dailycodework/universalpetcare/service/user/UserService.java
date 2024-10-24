@@ -8,6 +8,7 @@ import com.dailycodework.universalpetcare.request.RegistrationRequest;
 import com.dailycodework.universalpetcare.request.UserUpdateRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,18 @@ public class UserService implements IUserService{
 
         Optional<User> user = findUserById(userId);
         user.ifPresent(userRepository::delete);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Long count() {
+
+        return userRepository.count();
     }
 
     public Optional<User> findUserById(Long userId) {
